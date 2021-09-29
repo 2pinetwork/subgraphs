@@ -1,0 +1,8 @@
+type PiToken @entity {
+  id: ID!
+  totalSupply: BigInt!
+  totalStaked: BigInt!
+  stakedTVL: BigDecimal!
+  priceUSD: BigDecimal!
+  timestamp: BigInt!
+}

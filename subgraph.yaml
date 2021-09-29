@@ -1,0 +1,34 @@
+specVersion: 0.0.3
+description: 2PiToken
+repository: https://github.com/Gwydce/graph
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: 2Pi
+    network: mainnet
+    source:
+      address: '0xF47b68068794A952467737871888c3F8d22a561b'
+      abi: PiToken
+      startBlock: 1
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - PiToken
+      abis:
+        - name: PiToken
+          file: ./abis/PiToken.json
+        - name: LP
+          file: ./abis/LP.json
+        - name: ERC20
+          file: ./abis/ERC20.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+        - event: Minted(indexed address,indexed address,uint256,bytes,bytes)
+          handler: handleMint
+        - event: Burned(indexed address,indexed address,uint256,bytes,bytes)
+          handler: handleBurn
+      file: ./src/mapping.ts
