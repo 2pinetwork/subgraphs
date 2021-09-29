@@ -31,4 +31,28 @@ dataSources:
           handler: handleMint
         - event: Burned(indexed address,indexed address,uint256,bytes,bytes)
           handler: handleBurn
-      file: ./src/mapping.ts
+      file: ./src/PiTokenMapping.ts
+      # - kind: ethereum/contract
+      #   name: Stk2Pi
+      #   network: mainnet
+      #   source:
+      #     address: '0xBB1468ABbb437F115AfaC1Db84E4131E1F91DFeD'
+      #     abi: Stk2Pi
+      #     startBlock: 1
+      #   mapping:
+      #     kind: ethereum/events
+      #     apiVersion: 0.0.5
+      #     language: wasm/assemblyscript
+      #     entities:
+      #       - Stk2Pi
+      #     abis:
+      #       - name: Stk2Pi
+      #         file: ./abis/Stk2Pi.json
+      #     eventHandlers:
+      #       - event: Transfer(indexed address,indexed address,uint256)
+      #         handler: handleTransfer
+      #       - event: Minted(indexed address,indexed address,uint256,bytes,bytes)
+      #         handler: handleMint
+      #       - event: Burned(indexed address,indexed address,uint256,bytes,bytes)
+      #         handler: handleBurn
+      #     file: ./src/Stk2PiMapping.ts

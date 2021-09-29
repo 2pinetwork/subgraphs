@@ -1,8 +1,32 @@
+type Bundle @entity {
+  id: ID!
+  priceUSD: BigDecimal!
+}
+
 type PiToken @entity {
   id: ID!
   totalSupply: BigInt!
   totalStaked: BigInt!
-  stakedTVL: BigDecimal!
+  marketCap: BigDecimal!
   priceUSD: BigDecimal!
+  stakedTVL: BigDecimal!
+  # holders: BigInt!
   timestamp: BigInt!
+}
+
+type Deposit @entity {
+  id: ID!
+  timestamp: BigInt!
+}
+
+type Withdraw @entity {
+  id: ID!
+  timestamp: BigInt!
+}
+
+
+type Archimedes @entity {
+  id: ID!
+  deposits: BigInt!
+  withdraws: BigInt!
 }
