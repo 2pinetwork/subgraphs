@@ -1,6 +1,9 @@
 type Bundle @entity {
   id: ID!
   priceUSD: BigDecimal!
+  holders: [Holder!]! @derivedFrom(field: "bundle")
+  deposits: BigInt!
+  withdraws: BigInt!
 }
 
 type PiToken @entity {
@@ -10,23 +13,19 @@ type PiToken @entity {
   marketCap: BigDecimal!
   priceUSD: BigDecimal!
   stakedTVL: BigDecimal!
-  # holders: BigInt!
+  holders: BigInt!
   timestamp: BigInt!
 }
 
-type Deposit @entity {
+type Holder @entity {
   id: ID!
-  timestamp: BigInt!
+  amount: BigInt!
+  bundle: Bundle!
 }
 
-type Withdraw @entity {
+type Movement @entity {
   id: ID!
+  "Deposit/Withdraw"
+  kind: String!
   timestamp: BigInt!
-}
-
-
-type Archimedes @entity {
-  id: ID!
-  deposits: BigInt!
-  withdraws: BigInt!
 }
