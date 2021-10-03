@@ -10,6 +10,7 @@ export const PI_TOKEN_ADDRESS = Address.fromString('0xF47b68068794A9524677378718
 export const STK_PI_ADDRESS   = Address.fromString('0xBB1468ABbb437F115AfaC1Db84E4131E1F91DFeD')
 export const WETH_USD_LP      = Address.fromString('0x420B00795c2A6cbfe73F9D5F9a7B6f29120D8d01')
 export const PI_WETH_LP       = Address.fromString('0xABaf30e901f0bAeCDA840d94Dd44611F348D4cd2')
+export const ARCHIMEDES_ADDRESS = Address.fromString('0x6972749087b0FA296F90f4BF540c89614cDE5D68')
 export const BIG_INT_0        = BigInt.fromString('0')
 export const BIG_INT_1        = BigInt.fromString('1')
 export const ZERO_ADDRESS     = '0x0000000000000000000000000000000000000000'

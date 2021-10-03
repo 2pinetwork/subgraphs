@@ -37,3 +37,22 @@ services:
       POSTGRES_DB: graph-node
     volumes:
       - ./data/postgres:/var/lib/postgresql/data
+
+  explorer:
+    image: blockscout/blockscout-core:3.7.4-pre-4
+    ports:
+      - 4000:4000
+    environment:
+      NETWORK: Test
+      SUBNETWORK: Test
+      ETHEREUM_JSONRPC_VARIANT: ganache
+      ETHEREUM_JSONRPC_HTTP_URL: 'http://172.17.0.1:8545'
+      FAUCET_JSONRPC_HTTP_URL: 'http://172.17.0.1:8545'
+      ETHEREUM_JSONRPC_WS_URL: 'ws://172.17.0.1:8545'
+      DATABASE_URL: 'postgresql://graph-node:let-me-in@postgres:5432/blockscout?sslmode=none'
+      SECRET_KEY_BASE: 'VTIB3uHDNbvrY0+60ZWgUoUBKDn9ppLR8MI4CpRz4/qLyEFs54ktJfaNT6Z221No'
+      ECTO_USE_SSL: 'false'
+      BLOCKSCOUT_PROTOCOL: 'http'
+      PORT: 4000
+    depends_on:
+      - postgres

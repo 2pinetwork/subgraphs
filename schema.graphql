@@ -1,6 +1,7 @@
 type Bundle @entity {
   id: ID!
   priceUSD: BigDecimal!
+  holdersCount: BigInt!
   holders: [Holder!]! @derivedFrom(field: "bundle")
   deposits: BigInt!
   withdraws: BigInt!

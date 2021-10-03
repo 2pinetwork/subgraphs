@@ -1,12 +1,12 @@
 import { ethereum } from "@graphprotocol/graph-ts"
-import { Deposit, Withdraw } from '../generated/Stk2Pi/Stk2Pi'
+import { Deposit, EmergencyWithdraw, Withdraw } from '../generated/Archimedes/Archimedes'
 import { Movement } from '../generated/schema'
-import { BIG_INT_1, STK_PI_ADDRESS, } from './constants'
+import { BIG_INT_1, ARCHIMEDES_ADDRESS, } from './constants'
 import { getBundle, idForEvent, saveHolder } from './helpers'
-// import { log } from '@graphprotocol/graph-ts'
+import { log } from '@graphprotocol/graph-ts'
 
 function createKind(event: ethereum.Event, kind: String): void {
-  const id = `${STK_PI_ADDRESS.toHex()}:${idForEvent(event)}`
+  const id = `${ARCHIMEDES_ADDRESS.toHex()}:${idForEvent(event)}`
   let mov = new Movement(id)
   mov.kind = kind
   mov.timestamp = event.block.timestamp
@@ -21,9 +21,9 @@ export function handleDeposit(event: Deposit): void {
   bundle.deposits = bundle.deposits.plus(BIG_INT_1)
   bundle.save()
 
+  // PiToken rewards
   saveHolder(event.params.user.toHex())
 }
-
 
 export function handleWithdraw(event: Withdraw): void {
   createKind(event, "Withdraw")
@@ -33,5 +33,15 @@ export function handleWithdraw(event: Withdraw): void {
   bundle.withdraws = bundle.withdraws.plus(BIG_INT_1)
   bundle.save()
 
+  // PiToken rewards
   saveHolder(event.params.user.toHex())
+}
+
+export function handleEmergencyWithdraw(event: EmergencyWithdraw): void {
+  createKind(event, "Withdraw")
+
+  const bundle = getBundle()
+
+  bundle.withdraws = bundle.withdraws.plus(BIG_INT_1)
+  bundle.save()
 }
