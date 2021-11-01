@@ -1,5 +1,5 @@
 import { ethereum } from "@graphprotocol/graph-ts"
-import { Deposit, EmergencyWithdraw, Withdraw } from '../generated/Archimedes/Archimedes'
+import { Deposit, EmergencyWithdraw, Harvested, Withdraw } from '../generated/Archimedes/Archimedes'
 import { Movement } from '../generated/schema'
 import { BIG_INT_1, ARCHIMEDES_ADDRESS, } from './constants'
 import { getBundle, idForEvent, saveHolder } from './helpers'
@@ -44,4 +44,14 @@ export function handleEmergencyWithdraw(event: EmergencyWithdraw): void {
 
   bundle.withdraws = bundle.withdraws.plus(BIG_INT_1)
   bundle.save()
+}
+
+export function handleHarvest(event: Harvested): void {
+  let user = saveHolder(event.params.user.toHex())
+
+  // user can be null in other cases
+  if (user) {
+    user.harvested = user.harvested.plus(event.params.amount)
+    user.save()
+  }
 }

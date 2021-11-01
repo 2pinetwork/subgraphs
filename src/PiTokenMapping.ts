@@ -67,7 +67,12 @@ function recordEvent(event: ethereum.Event): void {
 
 export function ethPerPi(): BigDecimal {
   const piEthLP = ILP.bind(PI_WETH_LP)
-  const reserves = piEthLP.getReserves()
+  const reservesCall = piEthLP.try_getReserves()
+
+  if (reservesCall.reverted)
+    return BigDecimal.fromString('0')
+
+  const reserves = reservesCall.value
 
   let eth =
     piEthLP.token0() == WETH_ADDRESS
@@ -79,9 +84,12 @@ export function ethPerPi(): BigDecimal {
 
 export function ethPrice(): BigDecimal {
   const ethUsd = ILP.bind(WETH_USD_LP)
-  const reserves = ethUsd.getReserves()
-  const reserve0 = reserves.value0.toBigDecimal().times(BIG_DECIMAL_1E18)
-  const reserve1 = reserves.value1.toBigDecimal().times(BIG_DECIMAL_1E18)
+  const reserves = ethUsd.try_getReserves()
+  if (reserves.reverted)
+    return BigDecimal.fromString('0')
+
+  const reserve0 = reserves.value.value0.toBigDecimal().times(BIG_DECIMAL_1E18)
+  const reserve1 = reserves.value.value1.toBigDecimal().times(BIG_DECIMAL_1E18)
 
   return reserve1.div(reserve0).div(BIG_DECIMAL_1E6).times(BIG_DECIMAL_1E18)
 }

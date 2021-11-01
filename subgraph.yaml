@@ -8,9 +8,9 @@ dataSources:
     name: 2Pi
     network: mainnet
     source:
-      address: '0xF47b68068794A952467737871888c3F8d22a561b'
+      address: '0x9f9836AfB302FAf61F51a36A0eB79Bc95Be3DF6F'
       abi: PiToken
-      startBlock: 1
+      startBlock: 20761699
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -38,9 +38,9 @@ dataSources:
     name: Stk2Pi
     network: mainnet
     source:
-      address: '0xBB1468ABbb437F115AfaC1Db84E4131E1F91DFeD'
+      address: '0xE52f94EBbaA0214521e83aE6b7f86Fc7bd0B080B'
       abi: Stk2Pi
-      startBlock: 1
+      startBlock: 20761699
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -62,9 +62,9 @@ dataSources:
     name: Archimedes
     network: mainnet
     source:
-      address: '0x6972749087b0FA296F90f4BF540c89614cDE5D68'
+      address: '0x3B353b1CBDDA3A3D648af9825Ee34d9CA816FD38'
       abi: Archimedes
-      startBlock: 53
+      startBlock: 20761699
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -85,4 +85,6 @@ dataSources:
           handler: handleWithdraw
         - event: EmergencyWithdraw(indexed uint256,indexed address,uint256)
           handler: handleEmergencyWithdraw
+        - event: Harvested(indexed uint256,indexed address,uint256)
+          handler: handleHarvest
       file: ./src/ArchimedesMapping.ts

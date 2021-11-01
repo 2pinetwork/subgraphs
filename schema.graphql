@@ -22,6 +22,7 @@ type Holder @entity {
   id: ID!
   amount: BigInt!
   bundle: Bundle!
+  harvested: BigInt!
 }
 
 type Movement @entity {
