@@ -1,6 +1,8 @@
 type Bundle @entity {
   id: ID!
   priceUSD: BigDecimal!
+  stakedTVL: BigDecimal!
+  marketCap: BigDecimal!
   holdersCount: BigInt!
   holders: [Holder!]! @derivedFrom(field: "bundle")
   deposits: BigInt!
@@ -29,5 +31,15 @@ type Movement @entity {
   id: ID!
   "Deposit/Withdraw"
   kind: String!
+  timestamp: BigInt!
+}
+
+type KPI @entity {
+  "Will be triggered ones a day"
+  id: ID!
+  totalTVL: BigDecimal!
+  marketCap: BigDecimal!
+  holders: BigInt!
+  transactions: BigInt!
   timestamp: BigInt!
 }

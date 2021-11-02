@@ -6,7 +6,7 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: 2Pi
-    network: mainnet
+    network: mumbai
     source:
       address: '0x9f9836AfB302FAf61F51a36A0eB79Bc95Be3DF6F'
       abi: PiToken
@@ -36,7 +36,7 @@ dataSources:
       file: ./src/PiTokenMapping.ts
   - kind: ethereum/contract
     name: Stk2Pi
-    network: mainnet
+    network: mumbai
     source:
       address: '0xE52f94EBbaA0214521e83aE6b7f86Fc7bd0B080B'
       abi: Stk2Pi
@@ -60,7 +60,7 @@ dataSources:
       file: ./src/Stk2PiMapping.ts
   - kind: ethereum/contract
     name: Archimedes
-    network: mainnet
+    network: mumbai
     source:
       address: '0x3B353b1CBDDA3A3D648af9825Ee34d9CA816FD38'
       abi: Archimedes
@@ -88,3 +88,29 @@ dataSources:
         - event: Harvested(indexed uint256,indexed address,uint256)
           handler: handleHarvest
       file: ./src/ArchimedesMapping.ts
+  #- kind: ethereum/contract
+  #  name: Distributor
+  #  network: mumbai
+  #  source:
+  #    address: '0x542D0C3FBf67015295A7287B7724EA30f21De2BE'
+  #    abi: Distributor
+  #    startBlock: 20761699
+  #  mapping:
+  #    kind: ethereum/events
+  #    apiVersion: 0.0.5
+  #    language: wasm/assemblyscript
+  #    entities:
+  #      - KPI
+  #      - Bundle
+  #      - Archimedes
+  #    abis:
+  #      - name: Distributor
+  #        file: ./abis/Distributor.json
+  #      - name: Archimedes
+  #        file: ./abis/Archimedes.json
+  #      - name: IChainlink
+  #        file: ./abis/IChainlink.json
+  #    eventHandlers:
+  #      - event: FoundersDistributed(uint256)
+  #        handler: handleKPI
+  #    file: ./src/DistributorMapping.ts
