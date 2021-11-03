@@ -1,11 +1,22 @@
 import { Address, BigInt, BigDecimal, ethereum } from "@graphprotocol/graph-ts"
 import { Holder, Bundle } from '../generated/schema'
+import { LP as ILP } from '../generated/Distributor/LP'
+import { ERC20 as IERC20 } from '../generated/Distributor/ERC20'
+import { IChainlink } from '../generated/Distributor/IChainlink'
 import {
+  BIG_DECIMAL_0,
   BIG_DECIMAL_1E18,
   BIG_INT_0,
   BIG_INT_1,
   IPiToken,
-  IStk2Pi
+  IStk2Pi,
+  WETH_USD_LP,
+  WETH_ADDRESS,
+  PI_WETH_LP,
+  PI_TOKEN_ADDRESS,
+  ILPFactory,
+  ZERO_ADDRESS,
+  ChainLinkOracles,
 } from './constants'
 // import { log } from '@graphprotocol/graph-ts'
 
@@ -73,4 +84,107 @@ export function saveHolder(addr: String): (Holder | null) {
 
 export function idForEvent(event: ethereum.Event): String {
   return `${event.transaction.hash.toHex()}:${event.logIndex.toString()}`
+}
+
+export function ethUSDPrice(): BigDecimal {
+  const ethUsd = ILP.bind(WETH_USD_LP)
+  const reservesCall = ethUsd.try_getReserves()
+
+  if (reservesCall.reverted) { return BIG_DECIMAL_0 }
+
+  const reserves = reservesCall.value
+  const reserve0 = reserves.value0.toBigDecimal().times(BIG_DECIMAL_1E18)
+  const reserve1 = reserves.value1.toBigDecimal().times(BIG_DECIMAL_1E18)
+  let tokenPrecision: BigDecimal
+  let ratio: BigDecimal
+
+  if (ethUsd.token0() == WETH_ADDRESS) {
+    tokenPrecision = BigDecimal.fromString(
+      '1' + '0'.repeat(IERC20.bind(ethUsd.token0()).decimals())
+    )
+
+    ratio = reserve1.div(reserve0)
+  } else {
+    tokenPrecision = BigDecimal.fromString(
+      '1' + '0'.repeat(IERC20.bind(ethUsd.token1()).decimals())
+    )
+
+    ratio = reserve0.div(reserve1)
+  }
+
+  return ratio.div(tokenPrecision).times(BIG_DECIMAL_1E18)
+}
+
+export function ethPerToken(lp: ILP): BigDecimal {
+  const reservesCall = lp.try_getReserves()
+
+  if (reservesCall.reverted) { return BIG_DECIMAL_0 }
+
+  const reserves = reservesCall.value
+
+  let eth =
+    lp.token0() == WETH_ADDRESS
+      ? reserves.value0.toBigDecimal().times(BIG_DECIMAL_1E18).div(reserves.value1.toBigDecimal())
+      : reserves.value1.toBigDecimal().times(BIG_DECIMAL_1E18).div(reserves.value0.toBigDecimal())
+
+  return eth.div(BIG_DECIMAL_1E18)
+}
+
+export function lpPrice(lpAddr: Address): BigDecimal {
+  if (lpAddr == ZERO_ADDRESS) { return BIG_DECIMAL_0 }
+
+  const lp = ILP.bind(lpAddr)
+
+  if (lp.token0() == WETH_ADDRESS || lp.token1() == WETH_ADDRESS) {
+    return tokenPriceFromLP(lp)
+  } else {
+    const token0EthLP = getTokenWETHLP(lp.token0())
+    const token1EthLP = getTokenWETHLP(lp.token1())
+
+    const price = lpPrice(token0EthLP).plus(lpPrice(token1EthLP))
+
+    return price
+  }
+}
+
+export function tokenPriceFromLP(lp: ILP): BigDecimal {
+  return ethUSDPrice().times(ethPerToken(lp))
+}
+
+export function piPrice(): BigDecimal {
+  const lp = ILP.bind(PI_WETH_LP)
+  return ethUSDPrice().times(ethPerToken(lp))
+}
+
+export function getPriceFromChainlink(addr: Address): BigDecimal | null {
+  let oracleAddr: Address | null = ChainLinkOracles.get(addr)
+
+  if (oracleAddr === null) { return null }
+
+  let oracle = IChainlink.bind(oracleAddr)
+  let oraclePrecision =  BigDecimal.fromString('1' + '0'.repeat(oracle.decimals()))
+
+  // value1 is the `answer` attr
+  return oracle.latestRoundData().value1.toBigDecimal().div(oraclePrecision)
+}
+
+
+export function getTokenWETHLP(addr: Address): Address {
+  return ILPFactory.getPair(addr, WETH_ADDRESS)
+}
+
+export function getPrice(addr: Address): BigDecimal {
+  // First try to check for Chainlink oracle price
+  let oraclePrice: BigDecimal | null = getPriceFromChainlink(addr)
+  if (oraclePrice) { return oraclePrice }
+
+  let lpAddr = addr
+
+  // try LP
+  const reservesCall = ILP.bind(addr).try_getReserves()
+
+  // Try get LP for single token
+  if (reservesCall.reverted) { lpAddr = getTokenWETHLP(addr) }
+
+  return lpPrice(lpAddr)
 }

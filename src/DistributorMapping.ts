@@ -2,8 +2,12 @@ import { Address, BigDecimal, BigInt, ValueKind, ethereum } from "@graphprotocol
 import { FoundersDistributed, } from '../generated/Distributor/Distributor'
 import { IChainlink } from '../generated/Distributor/IChainlink'
 import { KPI } from '../generated/schema'
-import { BIG_INT_1, IArchimedes, ChainLinkOracles } from './constants'
-import { getBundle, idForEvent, saveHolder } from './helpers'
+import {
+  BIG_DECIMAL_0,
+  BIG_INT_1,
+  IArchimedes
+} from './constants'
+import { getPrice, getBundle, idForEvent, saveHolder } from './helpers'
 import { log } from '@graphprotocol/graph-ts'
 
 
@@ -30,45 +34,25 @@ export function handleKPI(event: FoundersDistributed): void {
 
 function getTotalTVL(): BigDecimal {
   const poolCall = IArchimedes.try_poolLength()
-  let amount = BigDecimal.fromString('0')
+  let amount = BIG_DECIMAL_0
 
   // Archimedes doesn't exist yet
-  if (poolCall.reverted) {
-    return amount
-  }
+  if (poolCall.reverted) { return amount }
 
   for (let i = BigInt.fromI32(0); i.lt(poolCall.value); i = i.plus(BigInt.fromI32(1))) {
-    amount = amount.plus(getPriceFromPool(i))
+    let partTVL = getTVLFromPool(i)
+    amount = amount.plus(partTVL)
   }
 
   return amount
 }
 
-function getPriceFromPool(i: BigInt): BigDecimal {
-  let poolInfo = IArchimedes.poolInfo(i)
-  let oracleAddr: Address | null = ChainLinkOracles.get(poolInfo.value0)
-
-  if (oracleAddr === null) {
-    return getLPPrice(i, poolInfo.value0)
-  } else {
-    return getPriceFromChainlink(i, oracleAddr)
-  }
-}
-
-function getPriceFromChainlink(i: BigInt, oracleAddr: Address): BigDecimal {
-  let oracle = IChainlink.bind(oracleAddr)
-  let oraclePrecision =  BigDecimal.fromString('1' + '0'.repeat(oracle.decimals()))
-  let price = oracle.latestRoundData().value1.toBigDecimal().div(
-    oraclePrecision
-  )
-
-  let poolPrecision = BigDecimal.fromString('1' + '0'.repeat(IArchimedes.decimals(i).toI32()))
+function getTVLFromPool(i: BigInt): BigDecimal {
+  const poolInfo = IArchimedes.poolInfo(i)
+  const price = getPrice(poolInfo.value0)
+  const poolPrecision = BigDecimal.fromString('1' + '0'.repeat(IArchimedes.decimals(i).toI32()))
 
   return IArchimedes.balance(i).toBigDecimal().times(price).div(poolPrecision)
-}
-
-function getLPPrice(i: BigInt, lpAddr: Address): BigDecimal {
-  return BigDecimal.fromString('0')
 }
 
 function calcKPIScore(kpi: KPI): BigDecimal {

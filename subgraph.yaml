@@ -24,8 +24,12 @@ dataSources:
           file: ./abis/PiToken.json
         - name: Stk2Pi
           file: ./abis/Stk2Pi.json
+        - name: Factory
+          file: ./abis/Factory.json
         - name: LP
           file: ./abis/LP.json
+        - name: ERC20
+          file: ./abis/ERC20.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
@@ -100,7 +104,7 @@ dataSources:
       apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
-        - KPI
+        - Factory
         - Bundle
         - Archimedes
       abis:
@@ -110,6 +114,12 @@ dataSources:
           file: ./abis/Archimedes.json
         - name: IChainlink
           file: ./abis/IChainlink.json
+        - name: Factory
+          file: ./abis/Factory.json
+        - name: LP
+          file: ./abis/LP.json
+        - name: ERC20
+          file: ./abis/ERC20.json
       eventHandlers:
         - event: FoundersDistributed(uint256)
           handler: handleKPI

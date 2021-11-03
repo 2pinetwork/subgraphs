@@ -3,7 +3,7 @@ import { Deposit, EmergencyWithdraw, Harvested, Withdraw } from '../generated/Ar
 import { Movement } from '../generated/schema'
 import { BIG_INT_1, ARCHIMEDES_ADDRESS, } from './constants'
 import { getBundle, idForEvent, saveHolder } from './helpers'
-import { log } from '@graphprotocol/graph-ts'
+// import { log } from '@graphprotocol/graph-ts'
 
 function createKind(event: ethereum.Event, kind: String): void {
   const id = `${ARCHIMEDES_ADDRESS.toHex()}:${idForEvent(event)}`
