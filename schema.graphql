@@ -41,5 +41,6 @@ type KPI @entity {
   marketCap: BigDecimal!
   holders: BigInt!
   transactions: BigInt!
+  score: BigDecimal!
   timestamp: BigInt!
 }
