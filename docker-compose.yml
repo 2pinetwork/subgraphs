@@ -11,14 +11,14 @@ services:
     depends_on:
       - ipfs
       - postgres
+    env_file:
+      - .env
     environment:
       postgres_host: postgres
       postgres_user: graph-node
       postgres_pass: let-me-in
       postgres_db: graph-node
       ipfs: 'ipfs:5001'
-      # Change next line if you want to connect to a different JSON-RPC endpoint
-      ethereum: 'mumbai:https://polygon-mumbai.g.alchemy.com/v2/TtkAvDHwt8_PFPo3n9WZiZ8v4zP8324V'
       GRAPH_LOG: debug
     networks:
       graph-net:
