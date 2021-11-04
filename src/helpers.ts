@@ -18,7 +18,7 @@ import {
   ZERO_ADDRESS,
   ChainLinkOracles,
 } from './constants'
-// import { log } from '@graphprotocol/graph-ts'
+import { log } from '@graphprotocol/graph-ts'
 
 
 export function getFullBalance(addr: String): BigInt {
@@ -87,10 +87,14 @@ export function idForEvent(event: ethereum.Event): String {
 }
 
 export function ethUSDPrice(): BigDecimal {
-  const ethUsd = ILP.bind(WETH_USD_LP)
-  const reservesCall = ethUsd.try_getReserves()
+  let ethUsd = ILP.bind(WETH_USD_LP)
+  let reservesCall = ethUsd.try_getReserves()
 
-  if (reservesCall.reverted) { return BIG_DECIMAL_0 }
+  if (reservesCall.reverted) {
+    // Use the DAI LP (8400~3100 usd)
+    ethUsd = ILP.bind(Address.fromString('0x20824aE16C7d601723d3b11473818AE5a04051C0'))
+    reservesCall = ethUsd.try_getReserves()
+  }
 
   const reserves = reservesCall.value
   const reserve0 = reserves.value0.toBigDecimal().times(BIG_DECIMAL_1E18)
@@ -98,21 +102,22 @@ export function ethUSDPrice(): BigDecimal {
   let tokenPrecision: BigDecimal
   let ratio: BigDecimal
 
+  // WETH always use 18 decimals precision
   if (ethUsd.token0() == WETH_ADDRESS) {
     tokenPrecision = BigDecimal.fromString(
-      '1' + '0'.repeat(IERC20.bind(ethUsd.token0()).decimals())
+      '1' + '0'.repeat(IERC20.bind(ethUsd.token1()).decimals())
     )
 
     ratio = reserve1.div(reserve0)
   } else {
     tokenPrecision = BigDecimal.fromString(
-      '1' + '0'.repeat(IERC20.bind(ethUsd.token1()).decimals())
+      '1' + '0'.repeat(IERC20.bind(ethUsd.token0()).decimals())
     )
 
     ratio = reserve0.div(reserve1)
   }
 
-  return ratio.div(tokenPrecision).times(BIG_DECIMAL_1E18)
+  return ratio.times(BIG_DECIMAL_1E18).div(tokenPrecision)
 }
 
 export function ethPerToken(lp: ILP): BigDecimal {
@@ -126,6 +131,8 @@ export function ethPerToken(lp: ILP): BigDecimal {
     lp.token0() == WETH_ADDRESS
       ? reserves.value0.toBigDecimal().times(BIG_DECIMAL_1E18).div(reserves.value1.toBigDecimal())
       : reserves.value1.toBigDecimal().times(BIG_DECIMAL_1E18).div(reserves.value0.toBigDecimal())
+
+  // let name = [IERC20.bind(lp.token1()).symbol(), IERC20.bind(lp.token0()).symbol()].join('-')
 
   return eth.div(BIG_DECIMAL_1E18)
 }
