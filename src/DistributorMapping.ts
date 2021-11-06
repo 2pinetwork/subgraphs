@@ -61,8 +61,8 @@ function calcKPIScore(kpi: KPI): BigDecimal {
   // This should change/improve for the next tranches
   let kpiData = new Map<string,Array<BigDecimal>>()
   kpiData.set('totalTVL',     [BigDecimal.fromString('0.4'), BigDecimal.fromString('10000000')]) // metric: [weight, expected]
-  kpiData.set('marketCap',    [BigDecimal.fromString('0.4'), BigDecimal.fromString('15000000')])
-  kpiData.set('holders',      [BigDecimal.fromString('0.1'), BigDecimal.fromString('2000')])
+  kpiData.set('marketCap',    [BigDecimal.fromString('0.4'), BigDecimal.fromString('8500000')])
+  kpiData.set('holders',      [BigDecimal.fromString('0.1'), BigDecimal.fromString('600')])
   kpiData.set('transactions', [BigDecimal.fromString('0.1'), BigDecimal.fromString('5000')])
 
   const METRICS = ['totalTVL', 'marketCap', 'holders', 'transactions']

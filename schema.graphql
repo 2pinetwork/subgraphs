@@ -5,6 +5,7 @@ type Bundle @entity {
   marketCap: BigDecimal!
   holdersCount: BigInt!
   holders: [Holder!]! @derivedFrom(field: "bundle")
+  totalRewards: BigInt!
   deposits: BigInt!
   withdraws: BigInt!
 }
@@ -25,6 +26,7 @@ type Holder @entity {
   amount: BigInt!
   bundle: Bundle!
   harvested: BigInt!
+  referralsPaid: BigInt!
 }
 
 type Movement @entity {

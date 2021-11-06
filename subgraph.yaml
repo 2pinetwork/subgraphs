@@ -124,3 +124,28 @@ dataSources:
         - event: FoundersDistributed(uint256)
           handler: handleKPI
       file: ./src/DistributorMapping.ts
+  - kind: ethereum/contract
+    name: Referral
+    network: mumbai
+    source:
+      address: '0x22656D1083De3eB5fB14cd08ec9521543E1278e6'
+      abi: Referral
+      startBlock: 20761788
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - Holder
+        - Bundle
+      abis:
+        - name: Referral
+          file: ./abis/Referral.json
+        - name: PiToken
+          file: ./abis/PiToken.json
+        - name: Stk2Pi
+          file: ./abis/Stk2Pi.json
+      eventHandlers:
+        - event: ReferralPaid(indexed address,uint256)
+          handler: handleReferralPaid
+      file: ./src/ReferralMapping.ts

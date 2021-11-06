@@ -47,9 +47,15 @@ export function handleEmergencyWithdraw(event: EmergencyWithdraw): void {
 }
 
 export function handleHarvest(event: Harvested): void {
-  let user = saveHolder(event.params.user.toHex())
+  let bundle = getBundle()
+
+  bundle.totalRewards = bundle.totalRewards.plus(
+    event.params.amount
+  )
+  bundle.save()
 
   // user can be null in other cases
+  let user = saveHolder(event.params.user.toHex())
   if (user) {
     user.harvested = user.harvested.plus(event.params.amount)
     user.save()
