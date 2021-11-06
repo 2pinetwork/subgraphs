@@ -9,8 +9,7 @@
     "build": "graph build",
     "deploy": "graph deploy Gwydce/graph --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/",
     "deploy-local": "graph deploy Gwydce/graph --ipfs http://localhost:5001 --node http://127.0.0.1:8020",
-    "ganache": "ganache -h 0.0.0.0 --fork 'https://polygon-mumbai.g.alchemy.com/v2/TtkAvDHwt8_PFPo3n9WZiZ8v4zP8324V' -i 80001 -u '0xd6216fc19db775df9774a6e33526131da7d19a2c' --verbose --debug --forkCacheSize='-1'",
-    "sungale": "rm -Rf generated/ build/ && yarn codegen && yarn remove-local && yarn create-local && yarn deploy-local -l v0.0.1"
+    "clean-deploy": "rm -Rf generated/ build/ && yarn codegen && yarn remove-local && yarn create-local && yarn deploy-local -l v0.0.1"
   },
   "devDependencies": {
     "@graphprotocol/graph-cli": "^0.22.1",
