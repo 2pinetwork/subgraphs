@@ -12,7 +12,7 @@ services:
       - ipfs
       - postgres
     env_file:
-      - .env
+      - .env # ethereum env with RPC url
     environment:
       postgres_host: postgres
       postgres_user: graph-node
