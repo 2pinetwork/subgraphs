@@ -92,8 +92,9 @@ export function ethUSDPrice(): BigDecimal {
 
   if (reservesCall.reverted) {
     // Use the DAI LP (8400~3100 usd)
-    ethUsd = ILP.bind(Address.fromString('0x20824aE16C7d601723d3b11473818AE5a04051C0'))
-    reservesCall = ethUsd.try_getReserves()
+    // ethUsd = ILP.bind(Address.fromString('0x20824aE16C7d601723d3b11473818AE5a04051C0'))
+    // reservesCall = ethUsd.try_getReserves()
+    return BigDecimal.fromString('4300.0')
   }
 
   const reserves = reservesCall.value

@@ -6,11 +6,11 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: 2Pi
-    network: mumbai
+    network: fuji
     source:
-      address: '0x9f9836AfB302FAf61F51a36A0eB79Bc95Be3DF6F'
+      address: '0x65881118D84006E0a7c5AAd9498C3949a2019e8E'
       abi: PiToken
-      startBlock: 20761699
+      startBlock: 2573752
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -40,11 +40,11 @@ dataSources:
       file: ./src/PiTokenMapping.ts
   - kind: ethereum/contract
     name: Stk2Pi
-    network: mumbai
+    network: fuji
     source:
-      address: '0xE52f94EBbaA0214521e83aE6b7f86Fc7bd0B080B'
+      address: '0x5Bb392af72BDD2BBa6d66D77c6B6a21e5EC2d41A'
       abi: Stk2Pi
-      startBlock: 20761814
+      startBlock: 2573972
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -64,11 +64,11 @@ dataSources:
       file: ./src/Stk2PiMapping.ts
   - kind: ethereum/contract
     name: Archimedes
-    network: mumbai
+    network: fuji
     source:
-      address: '0x3B353b1CBDDA3A3D648af9825Ee34d9CA816FD38'
+      address: '0x280816D08695aF15c57F2C3A84ec240a08DC78eb'
       abi: Archimedes
-      startBlock: 20761752
+      startBlock: 2574718
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -94,7 +94,7 @@ dataSources:
       file: ./src/ArchimedesMapping.ts
   - kind: ethereum/contract
     name: Distributor
-    network: mumbai
+    network: fuji
     source:
       address: '0x542D0C3FBf67015295A7287B7724EA30f21De2BE'
       abi: Distributor
@@ -126,11 +126,11 @@ dataSources:
       file: ./src/DistributorMapping.ts
   - kind: ethereum/contract
     name: Referral
-    network: mumbai
+    network: fuji
     source:
-      address: '0x22656D1083De3eB5fB14cd08ec9521543E1278e6'
+      address: '0x1b9003bB160062eCAB945D560F5F5dA32Eafb491'
       abi: Referral
-      startBlock: 20761788
+      startBlock: 2574733
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
