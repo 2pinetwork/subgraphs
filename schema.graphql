@@ -1,48 +1,5 @@
-type Bundle @entity {
+type Boost @entity {
   id: ID!
-  priceUSD: BigDecimal!
-  stakedTVL: BigDecimal!
-  marketCap: BigDecimal!
-  holdersCount: BigInt!
-  holders: [Holder!]! @derivedFrom(field: "bundle")
-  totalRewards: BigInt!
-  deposits: BigInt!
-  withdraws: BigInt!
-}
-
-type PiToken @entity {
-  id: ID!
-  totalSupply: BigInt!
-  totalStaked: BigInt!
-  marketCap: BigDecimal!
-  priceUSD: BigDecimal!
-  stakedTVL: BigDecimal!
-  holders: BigInt!
-  timestamp: BigInt!
-}
-
-type Holder @entity {
-  id: ID!
+  boosted_at: BigInt!
   amount: BigInt!
-  bundle: Bundle!
-  harvested: BigInt!
-  referralsPaid: BigInt!
-}
-
-type Movement @entity {
-  id: ID!
-  "Deposit/Withdraw"
-  kind: String!
-  timestamp: BigInt!
-}
-
-type KPI @entity {
-  "Will be triggered ones a day"
-  id: ID!
-  totalTVL: BigDecimal!
-  marketCap: BigDecimal!
-  holders: BigInt!
-  transactions: BigInt!
-  score: BigDecimal!
-  timestamp: BigInt!
 }
